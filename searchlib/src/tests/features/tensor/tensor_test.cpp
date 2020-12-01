@@ -11,9 +11,9 @@
 #include <vespa/searchlib/fef/test/queryenvironment.h>
 #include <vespa/searchlib/tensor/tensor_attribute.h>
 #include <vespa/searchlib/tensor/direct_tensor_attribute.h>
-#include <vespa/eval/eval/engine_or_factory.h>
 #include <vespa/eval/eval/function.h>
 #include <vespa/eval/eval/tensor_spec.h>
+#include <vespa/eval/eval/simple_value.h>
 #include <vespa/eval/eval/value.h>
 #include <vespa/eval/eval/value_codec.h>
 #include <vespa/eval/eval/test/value_compare.h>
@@ -28,7 +28,7 @@ using search::AttributeFactory;
 using search::tensor::TensorAttribute;
 using search::tensor::DirectTensorAttribute;
 using search::AttributeVector;
-using vespalib::eval::EngineOrFactory;
+using vespalib::eval::SimpleValue;
 using vespalib::eval::Function;
 using vespalib::eval::spec_from_value;
 using vespalib::eval::Value;
@@ -46,7 +46,7 @@ namespace
 {
 
 Value::UP make_empty(const vespalib::string &type) {
-    return EngineOrFactory::get().from_spec(TensorSpec(type));
+    return SimpleValue::from_spec(TensorSpec(type));
 }
 
 }
@@ -113,7 +113,7 @@ struct ExecFixture
         DirectTensorAttribute *directAttr =
             dynamic_cast<DirectTensorAttribute *>(attrs[1].get());
 
-        auto doc_tensor = EngineOrFactory::get().from_spec(TensorSpec("tensor(x{})")
+        auto doc_tensor = SimpleValue::from_spec(TensorSpec("tensor(x{})")
                                                            .add({{"x", "a"}}, 3)
                                                            .add({{"x", "b"}}, 5)
                                                            .add({{"x", "c"}}, 7));
@@ -129,7 +129,7 @@ struct ExecFixture
                         std::unique_ptr<Value> tensor)
     {
         vespalib::nbostream stream;
-        EngineOrFactory::get().encode(*tensor, stream);
+        encode_value(*tensor, stream);
         test.getQueryEnv().getProperties().add(tensorName,
                 vespalib::stringref(stream.peek(), stream.size()));
         setQueryTensorType(tensorName, tensorTypeSpec);
@@ -138,13 +138,13 @@ struct ExecFixture
     void setupQueryEnvironment() {
         setQueryTensor("tensorquery",
                        "tensor(q{})",
-                       EngineOrFactory::get().from_spec(TensorSpec("tensor(q{})")
+                       SimpleValue::from_spec(TensorSpec("tensor(q{})")
                                                         .add({{"q", "d"}}, 11 )
                                                         .add({{"q", "e"}}, 13 )
                                                         .add({{"q", "f"}}, 17 )));
         setQueryTensor("mappedtensorquery",
                        "tensor(x[2])",
-                       EngineOrFactory::get().from_spec(TensorSpec("tensor(x{},y{})")
+                       SimpleValue::from_spec(TensorSpec("tensor(x{},y{})")
                                                         .add({{"x", "0"},{"y", "0"}}, 11 )
                                                         .add({{"x", "0"},{"y", "1"}}, 13 )
                                                         .add({{"x", "1"},{"y", "0"}}, 17 )));

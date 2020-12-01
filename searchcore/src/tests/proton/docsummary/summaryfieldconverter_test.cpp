@@ -45,8 +45,9 @@
 #include <vespa/vespalib/data/slime/json_format.h>
 #include <vespa/vespalib/data/slime/binary_format.h>
 #include <vespa/searchlib/util/slime_output_raw_buf_adapter.h>
-#include <vespa/eval/eval/engine_or_factory.h>
 #include <vespa/eval/eval/value.h>
+#include <vespa/eval/eval/simple_value.h>
+#include <vespa/eval/eval/tensor_spec.h>
 #include <vespa/eval/eval/test/value_compare.h>
 #include <vespa/vespalib/data/slime/slime.h>
 
@@ -96,7 +97,7 @@ using vespalib::Slime;
 using vespalib::eval::Value;
 using vespalib::eval::ValueType;
 using vespalib::eval::TensorSpec;
-using vespalib::eval::EngineOrFactory;
+using vespalib::eval::SimpleValue;
 using vespalib::geo::ZCurve;
 using vespalib::slime::Cursor;
 using vespalib::string;
@@ -676,7 +677,7 @@ Test::requireThatPredicateIsPrinted()
 }
 
 Value::UP make_tensor(const TensorSpec &spec) {
-    return EngineOrFactory::get().from_spec(spec);
+    return SimpleValue::from_spec(spec);
 }
 
 void

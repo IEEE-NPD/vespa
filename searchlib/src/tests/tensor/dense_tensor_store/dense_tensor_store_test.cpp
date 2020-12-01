@@ -3,7 +3,7 @@
 LOG_SETUP("dense_tensor_store_test");
 #include <vespa/vespalib/testkit/test_kit.h>
 #include <vespa/searchlib/tensor/dense_tensor_store.h>
-#include <vespa/eval/eval/engine_or_factory.h>
+#include <vespa/eval/eval/simple_value.h>
 #include <vespa/eval/eval/tensor_spec.h>
 #include <vespa/eval/eval/test/value_compare.h>
 #include <vespa/eval/eval/value.h>
@@ -14,7 +14,7 @@ using search::tensor::DenseTensorStore;
 using vespalib::eval::TensorSpec;
 using vespalib::eval::Value;
 using vespalib::eval::ValueType;
-using vespalib::eval::EngineOrFactory;
+using vespalib::eval::SimpleValue;
 using vespalib::tensor::MutableDenseTensorView;
 
 using EntryRef = DenseTensorStore::EntryRef;
@@ -22,7 +22,7 @@ using EntryRef = DenseTensorStore::EntryRef;
 Value::UP
 makeTensor(const TensorSpec &spec)
 {
-    return EngineOrFactory::get().from_spec(spec);
+    return SimpleValue::from_spec(spec);
 }
 
 struct Fixture

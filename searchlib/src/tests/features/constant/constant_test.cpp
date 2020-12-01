@@ -7,7 +7,7 @@
 #include <vespa/searchlib/fef/test/indexenvironment.h>
 #include <vespa/eval/eval/function.h>
 #include <vespa/eval/eval/tensor_spec.h>
-#include <vespa/eval/eval/engine_or_factory.h>
+#include <vespa/eval/eval/simple_value.h>
 #include <vespa/eval/eval/value.h>
 #include <vespa/eval/eval/test/value_compare.h>
 
@@ -21,13 +21,13 @@ using vespalib::eval::Value;
 using vespalib::eval::DoubleValue;
 using vespalib::eval::TensorSpec;
 using vespalib::eval::ValueType;
-using vespalib::eval::EngineOrFactory;
+using vespalib::eval::SimpleValue;
 
 namespace
 {
 
 Value::UP make_tensor(const TensorSpec &spec) {
-    return EngineOrFactory::get().from_spec(spec);
+    return SimpleValue::from_spec(spec);
 }
 
 }
